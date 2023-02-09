@@ -138,5 +138,3 @@ def frequent_words_with_mismatches_and_reverse_complements(genome: str, k: int, 
         if value == m:
             patterns.append(key)
     return patterns
-
-
