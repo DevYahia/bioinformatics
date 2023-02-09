@@ -145,7 +145,7 @@ def greedy_motif_search(dna: List[str], k: int, t: int):
     for i in range(n - k + 1):
         motifs = [dna[0][i: i + k]]
         for j in range(1, t):
-            profile = Profile(motifs)
+            profile = [[y + 1 for y in x] for x in Profile(motifs)]
             most_probable = profile_most_probable_kmer(dna[j], k, profile)
             motifs.append(most_probable)
         # print(motifs)
