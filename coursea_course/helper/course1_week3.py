@@ -67,9 +67,14 @@ def Motifs(pattern: str, dna: List[str]) -> List[str]:
     return motifs
 
 
-def d(pattern: str, dna: List[str]):
-    motifs = Motifs(pattern, dna)
-    return sum([hf2.hamming_distance(motif, pattern) for motif in motifs])
+def d(pattern: str, dna: Union[List[str], str], motifs: List[str] = None):
+    if isinstance(dna, list):
+        return distance_between_pattern_and_strings(pattern, dna)
+    elif isinstance(dna, str):
+        return distance_between_pattern_and_strings(pattern, [dna])
+    elif motifs is not None:
+        return sum([hf2.hamming_distance(motif, pattern) for motif in motifs])
+    return None
 
 
 def median_string(dna: List[str], k: int):
@@ -163,3 +168,18 @@ def distance_between_pattern_and_strings(pattern: str, dna: List[str]):
                 hamming_distance = hamming_distance_0
         distance += hamming_distance
     return distance
+
+
+def find_all_median_strings(dna: List[str], k: int):
+    t = len(dna)
+    distances = [[] for _ in range(k * t)]
+    all_patterns = hf2.neighbors("A" * k, k)
+    for pattern in all_patterns:
+        pattern_distance = d(pattern, dna)
+        distances[pattern_distance].append(pattern)
+    for di in range(len(distances)):
+        if len(distances[di]) == 0:
+            continue
+        else:
+            return distances[di]
+    return []
