@@ -4,6 +4,7 @@ import scipy.stats as sp
 import math
 import functools as ft
 import operator
+import itertools
 
 import coursea_course.helper.course1_week2 as hf2
 import coursea_course.helper.constants as consts
@@ -31,12 +32,7 @@ def motif_enumeration(dna: List[str], k: int, d: int):
 def matrix_entropy(motifs: List[str]):
     L = len(motifs[0])
     n = len(motifs)
-    count = {
-        "A": [0 for _ in range(L)],
-        "T": [0 for _ in range(L)],
-        "G": [0 for _ in range(L)],
-        "C": [0 for _ in range(L)]
-    }
+    count = {k: [0 for _ in range(L)] for k in "ACGT"}
     for t, _dna in enumerate(motifs):
         for i in range(L):
             nucleotide = motifs[t][i]
@@ -152,3 +148,18 @@ def greedy_motif_search(dna: List[str], k: int, t: int):
         if score(motifs) < score(best_motifs):
             best_motifs = motifs[:]
     return best_motifs
+
+
+def distance_between_pattern_and_strings(pattern: str, dna: List[str]):
+    k = len(pattern)
+    n = len(dna[0])
+    distance = 0
+    for _dna in dna:
+        hamming_distance = np.inf
+        for i in range(n - k + 1):
+            pattern_0 = _dna[i:i + k]
+            hamming_distance_0 = hf2.hamming_distance(pattern, pattern_0)
+            if hamming_distance > hamming_distance_0:
+                hamming_distance = hamming_distance_0
+        distance += hamming_distance
+    return distance
