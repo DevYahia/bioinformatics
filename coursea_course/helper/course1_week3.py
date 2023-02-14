@@ -105,7 +105,7 @@ def profile_most_probable_kmer(dna: str, k: int, profile: List[List[float]]):
     return most_probable
 
 
-def Profile(motifs: List[str]):
+def Profile(motifs: List[str], laplace: bool = False):
     L = len(motifs[0])
     n = len(motifs)
     count = {k: [0 for _ in range(L)] for k in "ACGT"}
@@ -116,7 +116,12 @@ def Profile(motifs: List[str]):
 
     profile = {k: (np.array(v) / n).tolist() for k, v in count.items()}
 
-    return list(profile.values())
+    profile_list = list(profile.values())
+
+    if laplace:
+        return [[y + 1 for y in x] for x in profile_list]
+
+    return profile_list
 
 
 def score(motifs: List[str]):
