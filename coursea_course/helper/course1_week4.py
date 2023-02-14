@@ -1,5 +1,3 @@
-import coursea_course.helper.course1_week1 as c1w1
-import coursea_course.helper.course1_week2 as c1w2
 import coursea_course.helper.course1_week3 as c1w3
 from typing import *
 import random as rnd
