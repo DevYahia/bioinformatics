@@ -114,14 +114,9 @@ def Profile(motifs: List[str], laplace: bool = False):
             nucleotide = motifs[t][i]
             count[nucleotide][i] += 1
 
-    profile = {k: (np.array(v) / n).tolist() for k, v in count.items()}
+    profile_matrix = [((np.array(v) + (1 if laplace else 0)) / n).tolist() for _, v in count.items()]
 
-    profile_list = list(profile.values())
-
-    if laplace:
-        return [[y + 1 for y in x] for x in profile_list]
-
-    return profile_list
+    return profile_matrix
 
 
 def score(motifs: List[str]):
@@ -151,7 +146,7 @@ def greedy_motif_search(dna: List[str], k: int, t: int):
     for i in range(n - k + 1):
         motifs = [dna[0][i: i + k]]
         for j in range(1, t):
-            profile = [[y + 1 for y in x] for x in Profile(motifs)]
+            profile = Profile(motifs, laplace=True)
             most_probable = profile_most_probable_kmer(dna[j], k, profile)
             motifs.append(most_probable)
         # print(motifs)
